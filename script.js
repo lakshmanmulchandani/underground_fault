@@ -62,3 +62,58 @@ switchMode.addEventListener("change", function () {
     document.body.classList.remove("dark");
   }
 });
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  fetchData(); // Initial fetch
+  setInterval(fetchData, 5000); // Fetch every 5 seconds
+});
+
+function fetchData() {
+  // Assuming your API endpoint is 'https://example.com/api/getFault'
+  fetch('https://ugfault.onrender.com/getFault')
+    .then(response => response.json())
+    .then(data => {
+      updateTable(data);
+      updateArraySize(data.length);
+      newFaultsize(data.length)
+    })
+    
+    .catch(error => console.error('Error fetching data:', error));
+}
+
+function updateTable(data) {
+  const tableBody = document.getElementById('tableBody');
+
+  // Clear existing rows
+  tableBody.innerHTML = '';
+
+  // Assuming data is an array of objects
+  data.forEach(obj => {
+    const newRow = tableBody.insertRow();
+    // Assuming obj has properties 'value1' and 'value2'
+    const phase = obj.phase;
+    const distance = obj.distance
+    newRow.insertCell().textContent = ` Ward B, ${phase} phase at ${distance} km`;
+    newRow.insertCell().textContent = "John Doe"
+    // Add similar lines for other columns if needed
+    newRow.insertCell().textContent = '30/12/2023';
+    newRow.insertCell().textContent = 'Pending';
+    // newRow.insertCell().textContent = 'Static Content 5';
+  });
+}
+
+function updateArraySize(size) {
+  const pendingFaults = document.getElementById('pendingFaults');
+  pendingFaults.textContent = size.toString();
+
+}
+
+
+function newFaultsize(size) {
+ 
+  const newFaults = document.getElementById('newFaults');
+  
+newFaults.textContent = size.toString();
+
+}
